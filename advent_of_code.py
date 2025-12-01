@@ -26,6 +26,7 @@ def input_readlines(num,test=False):
         file_name = f'{INPUT_PATH}/{INPUT_TEMPLATE.format(num=num)}'
     with open(file_name,'r') as f:
         lines = f.readlines()
+        lines = [s.strip() for s in lines]
 
     return lines
     
