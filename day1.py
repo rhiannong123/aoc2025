@@ -3,7 +3,6 @@ import advent_of_code as aoc
 import pandas as pd
 
 
-## PART 1
 num = 1
 #lines = aoc.input_readlines(num, test=True)
 lines = aoc.input_readlines(num)
@@ -12,12 +11,18 @@ STARTING_POSITION = 50
 
 def turn_dial(initial, line):
     '''
-    initial - initial position
-    line - example "L54", "R3"
+    Inputs:
+      initial - initial position
+      line - example "L54", "R3"
+    Outputs:
+      end_actual - end position
+      end_at_zero - True or False; True if end position is 0
+      count_num_of_zero_crossings - number of zero crossings. if ending on 0 - that counts as a zero crossing (starting on 0 does not)
     '''
-    l_or_r = line[0]
-    increment = int(line[1:])
+    l_or_r = line[0] # 'L' or 'R'
+    increment = int(line[1:]) # number of times to turn the dial
     
+    # Catch corner case if starting at 0 and turning left, do not want to count starting at 0
     if initial == 0:
         start_at_zero = True
         first_time_in_while_flag = 1
@@ -25,22 +30,28 @@ def turn_dial(initial, line):
         start_at_zero = False
         first_time_in_while_flag = 1
 
+    # Keep track of number of zero crossings
     count_num_of_zero_crossings = 0
         
     if l_or_r == 'L':
+        # Subtract increment and keep track of zero crossings
         end_actual = initial - increment 
         while end_actual < 0:
             end_actual += 100
             count_num_of_zero_crossings += 1
+            # Don't count first time starting at 0 as a zero crossing
             if (start_at_zero == True) & (first_time_in_while_flag == 1):
                 first_time_in_while_flag = 0
                 count_num_of_zero_crossings -= 1
     else:
+        # Case 'R'. Add increment and keep track of zero crossings
         end_actual = initial + increment
         while end_actual > 99:
             end_actual -= 100
             count_num_of_zero_crossings += 1
             
+    # Return True if ending position at 0
+    # Also catch corner case of turning to the left and ending at 0 - that counts as a zero crossing
     if end_actual == 0:
         if l_or_r == 'L':
             count_num_of_zero_crossings += 1
@@ -48,7 +59,7 @@ def turn_dial(initial, line):
     else:
         end_at_zero = False
 
-    print(f"Initial position of {initial} with command {line} results in end position of {end_actual} and number of zero crossings of {count_num_of_zero_crossings}")
+    #print(f"Initial position of {initial} with command {line} results in end position of {end_actual} and number of zero crossings of {count_num_of_zero_crossings}")
     
     return end_actual, end_at_zero, count_num_of_zero_crossings
             
