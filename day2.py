@@ -18,6 +18,8 @@ def process_line(line, part, debug):
       part: 1 or 2, of puzzle
       debug: True or False 
     
+    Outputs:
+      sum of all invalid IDs
     '''
     
     start, end = line.split('-')
@@ -86,30 +88,30 @@ def main(lines,debug=DEBUG):
     lines = lines[0].split(',')
     
     ## Part 1
-    count_invalids = []
+    sum_invalids = []
     part = 1
     
     for line in lines:
-        count_invalid = process_line(line,part,debug)
-        if count_invalid != 0:
-            count_invalids.append(count_invalid)
+        sum_invalid = process_line(line,part,debug)
+        if sum_invalid != 0:
+            sum_invalids.append(sum_invalid)
         
-    part1_answer = sum(count_invalids)
+    part1_answer = sum(sum_invalids)
     print(f'The answer to Part 1: {part1_answer}')
     # Correct answer for Day 2, Part 1: 13108371860
     
     ## Part 2
-    count_invalids = []
+    sum_invalids = []
     part = 2
     
     for line in lines:
         #if line != '11-22':
         #    continue
-        count_invalid = process_line(line,part,debug)
-        if count_invalid != 0:
-            count_invalids.append(count_invalid)
+        sum_invalid = process_line(line,part,debug)
+        if sum_invalid != 0:
+            sum_invalids.append(sum_invalid)
 
-    part2_answer = sum(count_invalids)
+    part2_answer = sum(sum_invalids)
     print(f'The answer to Part 2: {part2_answer}')         
     # Correct answer for Day 2, Part 2: 22471660255
     
