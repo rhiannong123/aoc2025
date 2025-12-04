@@ -59,22 +59,25 @@ def process_line_part2(line, debug):
     continue_on = True
     
     if debug: 
-        print("")
-        print('1: ', line)
+        print("\n\n")
+        print('Line to start: ', line)
     
+    # Loop over 1,2... 9, drop all digits of one number until reach a length of less than 12
     for idigit in digits:
         if continue_on == 0:
             continue
+        # Drop current digit and test length of substring
         substring = line.replace(str(idigit),"")
         if debug:
-            print('substring: ', substring)
+            print('Dropped current digit, left with: ', substring)
         
         if len(substring) > 12:
             # Keep going, Remove idigit and keep testing
-            if debug:
-                print(line)
             line = substring
+            if debug:
+                print('substring longer than 12, going to test next digit to drop')
         else:
+            print('substring too short, stop testing digits.')
             continue_on = 0
             lowest_idigit = idigit
             substring_length = len(substring)
@@ -82,13 +85,13 @@ def process_line_part2(line, debug):
     print('post for loop:', line)
     print(lowest_idigit)
     print(substring_length)
+    
+    # Find number of lowest digits to keep and what index they are at. Only keep last few of them
     number_to_keep = NUM_OF_BATTERIES - substring_length
     positions = [idx for idx, c in enumerate(line) if c == str(lowest_idigit)]
-
-    # Keep only last 5 zeros
     keep = set(positions[-number_to_keep:])
 
-    # Build new string keeping non-zeros + last 5 zeros
+    # Build new string keeping non-lowest digits + last few of lowest digits
     max_joltage = "".join(c for i, c in enumerate(line) if c != str(lowest_idigit) or i in keep)
     
     if debug:
