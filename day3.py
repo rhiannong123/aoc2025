@@ -6,12 +6,10 @@ import pandas as pd
 num = 3
 
 lines = aoc.input_readlines(num, test=True)
-#lines = aoc.input_readlines(num)
+lines = aoc.input_readlines(num)
 
 DEBUG = True
-#DEBUG = False
-
-NUM_OF_BATTERIES = 12
+DEBUG = False
 
 def process_line_part1(line, debug):
     
@@ -61,38 +59,36 @@ def process_line_part2(line, debug):
     if debug: 
         print("\n\n")
         print('Line to start: ', line)
-    
-    # Loop over 1,2... 9, drop all digits of one number until reach a length of less than 12
-    for idigit in digits:
-        if continue_on == 0:
-            continue
-        # Drop current digit and test length of substring
-        substring = line.replace(str(idigit),"")
-        if debug:
-            print('Dropped current digit, left with: ', substring)
-        
-        if len(substring) > 12:
-            # Keep going, Remove idigit and keep testing
-            line = substring
-            if debug:
-                print('substring longer than 12, going to test next digit to drop')
-        else:
-            print('substring too short, stop testing digits.')
-            continue_on = 0
-            lowest_idigit = idigit
-            substring_length = len(substring)
-                
-    print('post for loop:', line)
-    print(lowest_idigit)
-    print(substring_length)
-    
-    # Find number of lowest digits to keep and what index they are at. Only keep last few of them
-    number_to_keep = NUM_OF_BATTERIES - substring_length
-    positions = [idx for idx, c in enumerate(line) if c == str(lowest_idigit)]
-    keep = set(positions[-number_to_keep:])
 
-    # Build new string keeping non-lowest digits + last few of lowest digits
-    max_joltage = "".join(c for i, c in enumerate(line) if c != str(lowest_idigit) or i in keep)
+    
+    # Loop over indeces 13 to last
+    #   Add the next digit to the end of current_best (test_line)
+    #   build a list (possibles) that has strings with removing a digit at each index of test_line
+    #   convert that list of strings to ints
+    #   is the max of that list greater than current best? set to current best
+    current_best = line[:12]
+    if debug:
+        print('')   
+        print(current_best)
+    for test_idx in range(12,len(line)):
+        
+        test_line = current_best + line[test_idx]
+        possibles = []
+        if debug:
+            print('')
+            print(test_line)
+        for idx in range(0,len(line[:12])):
+            s = test_line[:idx] + test_line[idx+1:]
+            if debug:
+                print(s)
+            possibles.append(s)
+        
+        possibles_ints = list(map(int, possibles))
+        
+        current_best = str(max(int(current_best), max(possibles_ints)))
+        
+        
+    max_joltage = int(current_best)
     
     if debug:
         print('###  ', max_joltage)
@@ -105,7 +101,6 @@ def main(lines,debug=DEBUG):
 
     ## Part 1
 
-    '''
     max_joltages = []
     for line in lines:
         max_joltages.append(process_line_part1(line,debug))
@@ -113,7 +108,7 @@ def main(lines,debug=DEBUG):
     part1_answer = sum(max_joltages)
     print(f'The answer to Part 1: {part1_answer}')
     # Correct answer for Day 3, Part 1: 17196
-    '''
+    
     
     ## Part 2
 
@@ -123,7 +118,8 @@ def main(lines,debug=DEBUG):
         
     part2_answer = sum(max_joltages)
     print(f'The answer to Part 2: {part2_answer}')
-    # Correct answer for Day 3, Part 2: 17196
+    # Correct answer for Day 3, Part 2: 171039099596062
+    # too low: 159618812449192 
     
     ## TEST AREA
     '''
