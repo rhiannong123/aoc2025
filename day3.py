@@ -53,23 +53,17 @@ def process_line_part1(line, debug):
 
 def process_line_part2(line, debug):
     
-    digits = range(1,10)
-    continue_on = True
-    
-    if debug: 
-        print("\n\n")
-        print('Line to start: ', line)
-
-    
     # Loop over indeces 13 to last
     #   Add the next digit to the end of current_best (test_line)
     #   build a list (possibles) that has strings with removing a digit at each index of test_line
     #   convert that list of strings to ints
     #   is the max of that list greater than current best? set to current best
     current_best = line[:12]
+    
     if debug:
         print('')   
         print(current_best)
+        
     for test_idx in range(12,len(line)):
         
         test_line = current_best + line[test_idx]
