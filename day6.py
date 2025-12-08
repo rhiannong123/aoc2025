@@ -34,16 +34,13 @@ def main(lines,debug=DEBUG):
         if idx == df.shape[0]-1:
             continue
         df.loc[idx,:] = pd.to_numeric(df.loc[idx,:])
-        
-        
-        
 
     ## Part 1
     solutions = process_df(df,debug)
                     
     part1_answer = sum(solutions)
     print(f'The answer to Part 1: {part1_answer}')
-    # Correct answer for Day 6, Part 1: 862
+    # Correct answer for Day 6, Part 1: 4693159084994
         
         
     ## Part 2
