@@ -40,8 +40,6 @@ def process_df(df,debug):
                     if ibeam == icolsplit:
                         splitter_found.append(ibeam)
                         
-                        
-            print(splitter_found)
             for splitter in splitter_found:
                 # beam meets splitter, split it on either side 
                 # Update cols_with_beam to exclude location at splitter, and add the locs on either side
@@ -70,22 +68,24 @@ def main(lines,debug=DEBUG):
     if debug:
         print(df)
 
-    ## Part 1
     df, count_beam_splits = process_df(df, debug)
-                    
+
+
+    ## Part 1
     part1_answer = count_beam_splits
     print(f'The answer to Part 1: {part1_answer}')
-    # Correct answer for Day 7, Part 1: 4693159084994
+    # Correct answer for Day 7, Part 1: 1562
         
         
     ## Part 2
+    smalldf = df[(df.index % 2 == 1)]
+    count_timelines = (smalldf == '|').sum().sum() - 1
     
-    '''
-    part2_answer = 2
+    part2_answer = count_timelines
     print(f'The answer to Part 2: {part2_answer}')         
-    # Correct answer for Day 4, Part 2: 7922
-    # Too low: 18687927624810 
-    '''
+    # Correct answer for Day 7, Part 2: 
+    # Too low: 3135
+    
     
     ## TEST AREA
     '''
