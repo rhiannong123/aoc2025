@@ -7,10 +7,10 @@ import pandas as pd
 day = 7
 
 lines = aoc.input_readlines(day, test=True)
-lines = aoc.input_readlines(day)
+#lines = aoc.input_readlines(day)
 
 DEBUG = True
-DEBUG = False
+#DEBUG = False
 
 def process_df(df,debug):
     
@@ -60,6 +60,70 @@ def process_df(df,debug):
         
     return df, count_beam_splits
 
+
+def count_timelines(df, debug):
+
+    # Add a column that is indeces with beams in it
+    beam_idxs = []    
+    for idx in df.index:
+        current_row_list = df.iloc[idx,:].to_list()
+        beam_idxs.append([i for i, val in enumerate(current_row_list) if val == '|'])
+    
+    df['beam_idxs'] = beam_idxs
+    
+    # Explore path from last row
+    # starting in middle for more interesting case
+
+    current_idx = 16
+    paths_to_check = [[[current_idx,4]]]
+    no_splits_path = []
+    while current_idx > 0:
+        current_idx -= 1
+        # FOR ODD ROWS:
+        if current_idx % 2 == 1:
+            new_paths_to_check = []
+            for path in paths_to_check:
+                last_step = path[-1]
+                current_col = last_step[1]
+                if current_col - 1 in df.columns:
+                    if df.iloc[current_idx,current_col - 1] == '|':
+                        new_path = path.copy()
+                        new_path.append([current_idx,current_col - 1])
+                        if new_path not in new_paths_to_check:
+                            new_paths_to_check.append(new_path)
+                if current_col + 1 in df.columns:
+                    if df.iloc[current_idx,current_col + 1] == '|':
+                        new_path = path.copy()
+                        new_path.append([current_idx,current_col + 1])
+                        if new_path not in new_paths_to_check:
+                            new_paths_to_check.append(new_path)
+
+                if df.iloc[current_idx,current_col] == '|':
+                    new_path = path.copy()
+                    new_path.append([current_idx,current_col])
+                    if new_path not in new_paths_to_check:
+                        new_paths_to_check.append(new_path)
+                    if new_path not in no_splits_path:
+                        no_splits_path.append(new_path)
+                    
+            paths_to_check = new_paths_to_check.copy()
+
+
+                    
+                     
+    
+    
+        
+    last_row_list = df.iloc[-1,:].to_list()
+    beams_in_last_row = [i for i, val in enumerate(last_row_list) if val == '|']
+
+    idx = beams_in_last_row[0]
+    
+
+
+    return 1
+
+
 def main(lines,debug=DEBUG):
 
     rows = [list(line) for line in lines]
@@ -78,7 +142,7 @@ def main(lines,debug=DEBUG):
         
         
     ## Part 2
-    smalldf = df[(df.index % 2 == 1)]
+    count_timelines = count_timelines(df, debug)
     count_timelines = (smalldf == '|').sum().sum() - 1
     
     part2_answer = count_timelines
